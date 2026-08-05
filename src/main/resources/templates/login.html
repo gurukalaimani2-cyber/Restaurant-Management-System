@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Restaurant Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="login-body">
+    <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-md-5 col-lg-4">
+                <div class="card login-card shadow-lg border-0">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <div class="login-icon mb-3">
+                                <i class="bi bi-shop"></i>
+                                <span class="fs-1">🍽️</span>
+                            </div>
+                            <h3 class="fw-bold">Restaurant Management System</h3>
+                            <p class="text-muted">Please sign in to continue</p>
+                        </div>
+
+                        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                            Invalid username or password. Please try again.
+                        </div>
+                        <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                            You have been logged out successfully.
+                        </div>
+                        <div th:if="${param.expired}" class="alert alert-warning" role="alert">
+                            Your session has expired. Please login again.
+                        </div>
+
+                        <form th:action="@{/login}" method="post">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username"
+                                       placeholder="Enter your username" required autofocus>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password"
+                                       placeholder="Enter your password" required>
+                            </div>
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <p class="text-center text-white mt-3 small">&copy; 2026 Restaurant Management System</p>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+</html>
