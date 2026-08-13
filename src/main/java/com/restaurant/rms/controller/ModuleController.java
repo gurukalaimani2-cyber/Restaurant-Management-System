@@ -7,23 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ModuleController {
 
-    @GetMapping("/reservation")
-    public String reservation(Model model) {
-        model.addAttribute("moduleName", "Reservation");
-        return "coming-soon";
-    }
-
-    @GetMapping("/menu")
-    public String menu(Model model) {
-        model.addAttribute("moduleName", "Menu");
-        return "coming-soon";
-    }
-
-    @GetMapping("/orders")
-    public String orders(Model model) {
-        model.addAttribute("moduleName", "Orders");
-        return "coming-soon";
-    }
+    // NOTE: /reservation is handled by ReservationController.java (Module 2)
+    // NOTE: /menu is handled by MenuController.java (Module 3)
+    // NOTE: /orders is now handled by OrderController.java (Module 4)
+    // The remaining modules below are still "Coming Soon" placeholders.
 
     @GetMapping("/kitchen")
     public String kitchen(Model model) {
