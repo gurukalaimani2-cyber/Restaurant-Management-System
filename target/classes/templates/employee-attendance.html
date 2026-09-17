@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Attendance - Restaurant Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+        <a class="navbar-brand fw-bold" th:href="@{/employee/dashboard}">🍽️ Restaurant Management System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" th:href="@{/employee/dashboard}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/employee/orders}">Orders</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/employee/reservations}">Reservations</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/employee/attendance}">Attendance</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/employee/profile}">My Profile</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item"><span class="nav-link text-light" sec:authentication="name">Staff</span></li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-outline-light btn-sm ms-2">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4 px-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <h5 class="mb-1">Current status</h5>
+                    <span th:if="${clockedIn}" class="badge bg-success">Clocked in</span>
+                    <span th:unless="${clockedIn}" class="badge bg-secondary">Clocked out</span>
+                </div>
+                <div>
+                    <form th:action="@{/employee/attendance/clock-in}" method="post" class="d-inline"
+                          th:unless="${clockedIn}">
+                        <button type="submit" class="btn btn-success">Clock in</button>
+                    </form>
+                    <form th:action="@{/employee/attendance/clock-out}" method="post" class="d-inline"
+                          th:if="${clockedIn}">
+                        <button type="submit" class="btn btn-danger">Clock out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="fw-bold mb-3">My Attendance History</h3>
+
+        <div class="alert alert-info" th:if="${#lists.isEmpty(history)}">
+            No attendance records yet.
+        </div>
+
+        <div class="card shadow-sm" th:unless="${#lists.isEmpty(history)}">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Date</th>
+                            <th>Clock in</th>
+                            <th>Clock out</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="a : ${history}">
+                            <td th:text="${#temporals.format(a.workDate, 'dd MMM yyyy')}">Date</td>
+                            <td th:text="${#temporals.format(a.clockIn, 'HH:mm')}">—</td>
+                            <td th:text="${a.clockOut != null} ? ${#temporals.format(a.clockOut, 'HH:mm')} : '—'">—</td>
+                            <td>
+                                <span class="badge bg-success" th:if="${a.clockOut != null}">Closed</span>
+                                <span class="badge bg-warning text-dark" th:if="${a.clockOut == null}">Open</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center text-muted mt-5 mb-3">
+        <small>&copy; 2026 Restaurant Management System. All rights reserved.</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill #<span th:text="${bill.id}"></span> - Restaurant Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3 no-print">
+        <a class="navbar-brand fw-bold" th:href="@{/dashboard}">🍽️ Restaurant Management System</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto"></ul>
+            <ul class="navbar-nav">
+                <li class="nav-item"><span class="nav-link text-light" sec:authentication="name">Admin</span></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4 px-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card dashboard-card shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <h4 class="fw-bold mb-0">🍽️ Restaurant Management System</h4>
+                            <p class="text-muted mb-0">Invoice</p>
+                        </div>
+
+                        <table class="table table-borderless mb-2">
+                            <tr>
+                                <td class="fw-bold">Bill #</td>
+                                <td th:text="${bill.id}"></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Order #</td>
+                                <td th:text="${bill.orderId}"></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Customer</td>
+                                <td th:text="${bill.customerName}"></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Billed At</td>
+                                <td th:text="${#temporals.format(bill.billedAt, 'dd-MM-yyyy HH:mm')}"></td>
+                            </tr>
+                        </table>
+
+                        <hr>
+
+                        <table class="table">
+                            <tr>
+                                <td>Subtotal</td>
+                                <td class="text-end" th:text="${'₹' + bill.subtotal}"></td>
+                            </tr>
+                            <tr>
+                                <td th:text="'Tax (' + ${bill.taxPercent} + '%)'"></td>
+                                <td class="text-end"
+                                    th:text="${'₹' + #numbers.formatDecimal(bill.subtotal * (bill.taxPercent / 100), 1, 2)}"></td>
+                            </tr>
+                            <tr>
+                                <td>Discount</td>
+                                <td class="text-end" th:text="${'-₹' + bill.discount}"></td>
+                            </tr>
+                            <tr class="fw-bold fs-5">
+                                <td>Total</td>
+                                <td class="text-end" th:text="${'₹' + bill.totalAmount}"></td>
+                            </tr>
+                        </table>
+
+                        <div class="text-center my-3">
+                            <span class="badge fs-6"
+                                  th:classappend="${bill.paymentStatus == 'PAID'} ? 'bg-success' : 'bg-warning text-dark'"
+                                  th:text="${bill.paymentStatus}"></span>
+                            <span th:if="${bill.paymentMethod != null}" class="text-muted ms-2"
+                                  th:text="'via ' + ${bill.paymentMethod}"></span>
+                        </div>
+
+                        <div th:if="${bill.paymentStatus == 'UNPAID'}" class="no-print">
+                            <form th:action="@{'/billing/pay/' + ${bill.id}}" method="post" class="d-flex gap-2 mt-3">
+                                <select name="paymentMethod" class="form-select" required>
+                                    <option value="CASH">Cash</option>
+                                    <option value="CARD">Card</option>
+                                    <option value="UPI">UPI</option>
+                                </select>
+                                <button type="submit" class="btn btn-success text-nowrap">Mark as Paid</button>
+                            </form>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4 no-print">
+                            <button onclick="window.print()" class="btn btn-outline-primary">Print</button>
+                            <a th:href="@{/billing}" class="btn btn-outline-secondary">Back to Billing</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center text-muted mt-5 mb-3 no-print">
+        <small>&copy; 2026 Restaurant Management System. All rights reserved.</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+</html>

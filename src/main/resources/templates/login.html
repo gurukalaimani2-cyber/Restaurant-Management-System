@@ -3,53 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Restaurant Management System</title>
+    <title>Restaurant Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="login-body">
     <div class="container">
-        <div class="row justify-content-center align-items-center min-vh-100">
-            <div class="col-md-5 col-lg-4">
-                <div class="card login-card shadow-lg border-0">
-                    <div class="card-body p-5">
-                        <div class="text-center mb-4">
-                            <div class="login-icon mb-3">
-                                <i class="bi bi-shop"></i>
-                                <span class="fs-1">🍽️</span>
-                            </div>
-                            <h3 class="fw-bold">Restaurant Management System</h3>
-                            <p class="text-muted">Please sign in to continue</p>
+        <div class="row justify-content-center align-items-center min-vh-100 py-4">
+            <div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+
+                <div class="card login-card border-0">
+                    <div class="card-body p-4 p-sm-5">
+
+                        <div class="login-head text-center mb-4">
+                            <div class="login-mark mb-3">&#127860;</div>
+                            <h1>Restaurant Management System</h1>
                         </div>
 
-                        <div th:if="${param.error}" class="alert alert-danger" role="alert">
-                            Invalid username or password. Please try again.
+                        <div th:if="${param.error}" class="alert alert-danger alert-keep" role="alert">
+                            That username and password don't match an account.
                         </div>
                         <div th:if="${param.logout}" class="alert alert-success" role="alert">
-                            You have been logged out successfully.
+                            You're signed out.
                         </div>
                         <div th:if="${param.expired}" class="alert alert-warning" role="alert">
-                            Your session has expired. Please login again.
+                            Your session timed out. Sign in again.
+                        </div>
+                        <div th:if="${param.registered}" class="alert alert-success" role="alert">
+                            Account created. Sign in to continue.
                         </div>
 
-                        <form th:action="@{/login}" method="post">
+                        <form th:action="@{/login}" method="post" novalidate>
+
+                            <!-- Role picker. Keep these three inputs first: the
+                                 stylesheet uses them to switch the panel below. -->
+                            <input class="role-radio" type="radio" name="role" id="role-admin"
+                                   value="ADMIN" checked>
+                            <input class="role-radio" type="radio" name="role" id="role-employee"
+                                   value="EMPLOYEE">
+                            <input class="role-radio" type="radio" name="role" id="role-customer"
+                                   value="CUSTOMER">
+
+                            <div class="role-switch mb-4">
+                                <label for="role-admin"    class="role-option">Admin</label>
+                                <label for="role-employee" class="role-option">Employee</label>
+                                <label for="role-customer" class="role-option">Customer</label>
+                            </div>
+
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
                                 <input type="text" class="form-control" id="username" name="username"
-                                       placeholder="Enter your username" required autofocus>
+                                       autocomplete="username" autocapitalize="none" spellcheck="false"
+                                       required autofocus>
                             </div>
+
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" name="password"
-                                       placeholder="Enter your password" required>
+                                       autocomplete="current-password" required>
                             </div>
+
                             <div class="d-grid mt-4">
-                                <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                                <button type="submit" class="btn btn-primary btn-lg">Sign in</button>
                             </div>
+
+                            <!-- Only customers can create their own account. -->
+                            <p class="customer-only text-center small mt-4 mb-0">
+                                <a th:href="@{/register}">Create an account</a>
+                            </p>
+
                         </form>
+
                     </div>
                 </div>
-                <p class="text-center text-white mt-3 small">&copy; 2026 Restaurant Management System</p>
+
+                <p class="text-center mt-3 small">&copy; 2026 Restaurant Management System</p>
             </div>
         </div>
     </div>

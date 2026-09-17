@@ -1,54 +1,729 @@
+/* ============================================================
+   Restaurant Management System — "Enamel & Brass"
+   A single stylesheet that restyles every Thymeleaf page.
+   It re-points Bootstrap 5.3's own CSS variables, so the
+   navbar, cards, tables, forms, badges and buttons all pick
+   up the new design with no template edits required.
+
+   Palette reference: kitchen enamelware, brass fittings, and
+   the colour language of order dockets.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+    /* ---- Core palette ---- */
+    --pine: #16302B;            /* dark enamel — nav, table heads, primary */
+    --pine-deep: #0D211D;       /* pressed / login ground */
+    --pine-soft: #24463F;       /* raised dark surfaces */
+
+    --chalk: #EFF2EE;           /* page ground, cool with a green cast */
+    --surface: #FFFFFF;
+    --surface-sunk: #F6F8F5;
+
+    --brass: #B8863B;           /* accent: active states, rules, focus */
+    --brass-ink: #855F22;       /* brass dark enough for body text */
+    --brass-wash: #F6EEDF;
+
+    --ink: #17221F;             /* primary text */
+    --ink-soft: #5A6863;        /* secondary text */
+    --hairline: #DCE2DC;
+    --hairline-firm: #C3CDC5;
+
+    /* ---- Docket status colours ---- */
+    --amber: #A8700A;   --amber-wash: #FBEFD5;   /* pending */
+    --teal: #1A6E6A;    --teal-wash: #DCECEB;    /* preparing / info */
+    --moss: #2F6B3F;    --moss-wash: #E0EDE2;    /* complete / success */
+    --chile: #A8281E;   --chile-wash: #F8E2E0;   /* danger */
+
+    --font-display: 'Bricolage Grotesque', 'Segoe UI', sans-serif;
+    --font-body: 'IBM Plex Sans', 'Segoe UI', Tahoma, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+
+    --shadow-low: 0 1px 2px rgba(13, 33, 29, 0.05);
+    --shadow-lift: 0 10px 28px -12px rgba(13, 33, 29, 0.28);
+
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+    /* ---- Bootstrap 5.3 variable overrides ---- */
+    --bs-body-font-family: var(--font-body);
+    --bs-body-color: var(--ink);
+    --bs-body-bg: var(--chalk);
+    --bs-border-color: var(--hairline);
+    --bs-link-color: var(--brass-ink);
+    --bs-link-hover-color: var(--pine);
+    --bs-secondary-color: var(--ink-soft);
+
+    --bs-primary: var(--pine);           --bs-primary-rgb: 22, 48, 43;
+    --bs-success: var(--moss);           --bs-success-rgb: 47, 107, 63;
+    --bs-warning: var(--amber);          --bs-warning-rgb: 168, 112, 10;
+    --bs-danger: var(--chile);           --bs-danger-rgb: 168, 40, 30;
+    --bs-info: var(--teal);              --bs-info-rgb: 26, 110, 106;
+    --bs-secondary: var(--ink-soft);     --bs-secondary-rgb: 90, 104, 99;
+
+    --bs-border-radius: 0.625rem;
+    --bs-border-radius-sm: 0.4rem;
+    --bs-border-radius-lg: 0.875rem;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+html { scroll-behavior: smooth; }
+
 body {
-    background-color: #f4f6f9;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--chalk);
+    background-image:
+        radial-gradient(circle at 12% -8%, rgba(184, 134, 59, 0.10), transparent 45%),
+        radial-gradient(circle at 92% 4%, rgba(26, 110, 106, 0.09), transparent 42%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
 }
 
-.login-body {
-    background: linear-gradient(135deg, #2c3e50 0%, #4a6572 100%);
-    min-height: 100vh;
+h1, h2, h3, h4, h5, .navbar-brand, .card-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--ink);
 }
 
-.login-card {
-    border-radius: 16px;
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.4rem; }
+h5, .card-title { font-size: 1.05rem; }
+
+a { text-decoration: none; transition: color 0.18s var(--ease); }
+a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+
+.text-muted { color: var(--ink-soft) !important; }
+
+::selection { background: var(--brass-wash); color: var(--pine); }
+
+/* Keyboard focus stays visible everywhere. */
+:focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: 2px;
+    border-radius: 3px;
 }
 
-.login-icon {
-    font-size: 2.5rem;
-}
+/* ============================================================
+   Navbar — dark enamel with a brass rule.
+   The active link's underline draws itself in on page load.
+   ============================================================ */
 
-.welcome-banner {
-    background-color: #ffffff;
-    border-left: 5px solid #0d6efd;
-}
-
-.dashboard-card {
-    border: none;
-    border-radius: 12px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.dashboard-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.dashboard-icon {
-    font-size: 2.2rem;
+nav.navbar, .navbar.bg-dark {
+    background-color: var(--pine) !important;
+    border-bottom: 1px solid rgba(184, 134, 59, 0.35);
+    box-shadow: 0 1px 0 rgba(13, 33, 29, 0.6), 0 8px 24px -18px rgba(13, 33, 29, 0.9);
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
 }
 
 .navbar-brand {
-    font-size: 1.3rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.22rem;
+    letter-spacing: -0.02em;
+    color: #F4F7F3 !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
 }
 
-.coming-soon-wrapper {
-    min-height: 70vh;
+.navbar-brand:hover { text-decoration: none; color: #FFFFFF !important; }
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #B9C6BF;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.45rem 0.8rem;
+    position: relative;
+    transition: color 0.2s var(--ease);
 }
+
+.navbar-dark .navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0.8rem;
+    right: 0.8rem;
+    bottom: 0.05rem;
+    height: 2px;
+    background: var(--brass);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.28s var(--ease);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover { color: #FFFFFF; }
+.navbar-dark .navbar-nav .nav-link:hover::after { transform: scaleX(1); }
+
+.navbar-dark .navbar-nav .nav-link.active {
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.navbar-dark .navbar-nav .nav-link.active::after {
+    transform: scaleX(1);
+    animation: draw-rule 0.55s var(--ease) 0.15s both;
+}
+
+@keyframes draw-rule {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+
+/* The username chip sitting beside Logout. */
+.navbar-dark .navbar-nav .nav-link.text-light {
+    color: #CFDAD3 !important;
+    font-weight: 400;
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(184, 134, 59, 0.3);
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+}
+
+.navbar-dark .navbar-nav .nav-link.text-light::after { display: none; }
+
+.navbar-toggler { border-color: rgba(184, 134, 59, 0.4); }
+.navbar-toggler:focus { box-shadow: 0 0 0 0.2rem rgba(184, 134, 59, 0.3); }
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+
+.btn {
+    font-family: var(--font-body);
+    font-weight: 500;
+    border-radius: var(--bs-border-radius-sm);
+    padding: 0.45rem 1rem;
+    transition: transform 0.12s var(--ease), background-color 0.18s var(--ease),
+                border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.btn:active { transform: translateY(1px) scale(0.985); }
+
+.btn-primary {
+    --bs-btn-bg: var(--pine);
+    --bs-btn-border-color: var(--pine);
+    --bs-btn-hover-bg: var(--pine-soft);
+    --bs-btn-hover-border-color: var(--pine-soft);
+    --bs-btn-active-bg: var(--pine-deep);
+    --bs-btn-active-border-color: var(--pine-deep);
+    box-shadow: var(--shadow-low);
+}
+
+.btn-primary:hover { box-shadow: 0 6px 16px -8px rgba(13, 33, 29, 0.55); }
+
+.btn-outline-primary {
+    --bs-btn-color: var(--pine);
+    --bs-btn-border-color: var(--hairline-firm);
+    --bs-btn-hover-bg: var(--pine);
+    --bs-btn-hover-border-color: var(--pine);
+    --bs-btn-hover-color: #FFFFFF;
+    --bs-btn-active-bg: var(--pine-deep);
+    background: var(--surface);
+}
+
+.btn-success { --bs-btn-bg: var(--moss); --bs-btn-border-color: var(--moss);
+               --bs-btn-hover-bg: #275A35; --bs-btn-hover-border-color: #275A35; }
+.btn-danger  { --bs-btn-bg: var(--chile); --bs-btn-border-color: var(--chile);
+               --bs-btn-hover-bg: #8E2018; --bs-btn-hover-border-color: #8E2018; }
+.btn-outline-success { --bs-btn-color: var(--moss); --bs-btn-border-color: var(--moss);
+                       --bs-btn-hover-bg: var(--moss); }
+.btn-outline-danger  { --bs-btn-color: var(--chile); --bs-btn-border-color: var(--chile);
+                       --bs-btn-hover-bg: var(--chile); }
+.btn-warning { --bs-btn-bg: var(--amber); --bs-btn-border-color: var(--amber);
+               --bs-btn-color: #FFFFFF; --bs-btn-hover-bg: #8E5E07;
+               --bs-btn-hover-color: #FFFFFF; }
+
+.btn-outline-light {
+    --bs-btn-color: #E6EDE8;
+    --bs-btn-border-color: rgba(184, 134, 59, 0.45);
+    --bs-btn-hover-bg: var(--brass);
+    --bs-btn-hover-border-color: var(--brass);
+    --bs-btn-hover-color: var(--pine-deep);
+}
+
+.btn-sm { padding: 0.3rem 0.7rem; font-size: 0.83rem; }
+.btn-lg { padding: 0.65rem 1.1rem; font-size: 1rem; }
+
+/* ============================================================
+   Cards, banners, dashboard tiles
+   ============================================================ */
+
+.card {
+    background-color: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: var(--bs-border-radius-lg);
+    box-shadow: var(--shadow-low);
+}
+
+/* Bootstrap's shadow utilities are used inline across the
+   templates; keep them quiet and consistent instead. */
+.card.shadow-sm, .card.shadow, .card.shadow-lg { box-shadow: var(--shadow-low); }
+
+.card-header {
+    background: var(--surface-sunk);
+    border-bottom: 1px solid var(--hairline);
+    font-family: var(--font-display);
+    font-weight: 600;
+}
+
+.welcome-banner {
+    background: linear-gradient(135deg, var(--pine) 0%, #1D3C35 55%, var(--pine-soft) 100%);
+    border: none;
+    border-radius: var(--bs-border-radius-lg) !important;
+    color: #F2F6F2;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-banner h2 { color: #FFFFFF; }
+.welcome-banner p, .welcome-banner .text-muted { color: #AFC0B8 !important; }
+
+/* A brass sheen crosses the banner once, on load. */
+.welcome-banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 38%, rgba(184, 134, 59, 0.22) 50%, transparent 62%);
+    transform: translateX(-110%);
+    animation: sheen 1.5s var(--ease) 0.35s both;
+    pointer-events: none;
+}
+
+@keyframes sheen {
+    to { transform: translateX(110%); }
+}
+
+/* Tiles: quiet at rest, and they lift toward the cursor. */
+.dashboard-card {
+    border: 1px solid var(--hairline);
+    border-radius: var(--bs-border-radius-lg);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.26s var(--ease), box-shadow 0.26s var(--ease),
+                border-color 0.26s var(--ease);
+}
+
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 3px;
+    background: var(--brass);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.3s var(--ease);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--hairline-firm);
+    box-shadow: var(--shadow-lift);
+}
+
+.dashboard-card:hover::before { transform: scaleY(1); }
+
+.dashboard-icon {
+    font-size: 1.9rem;
+    line-height: 1;
+    display: inline-block;
+    transition: transform 0.3s var(--ease);
+}
+
+.dashboard-card:hover .dashboard-icon { transform: scale(1.12) rotate(-5deg); }
+
+.dashboard-card .card-text { font-size: 0.86rem; }
+
+/* ============================================================
+   Tables — the order sheet
+   ============================================================ */
+
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: var(--surface-sunk);
+    --bs-table-hover-bg: var(--brass-wash);
+    color: var(--ink);
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.table thead th, .table-dark th {
+    background-color: var(--pine) !important;
+    color: #DCE6DF !important;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    border-bottom: none;
+    padding: 0.7rem 0.75rem;
+    white-space: nowrap;
+}
+
+.table tbody td {
+    border-color: var(--hairline);
+    padding: 0.65rem 0.75rem;
+}
+
+.table tbody tr { transition: background-color 0.16s var(--ease); }
+
+/* Record ids and money columns get tabular mono figures.
+   The templates already mark amount cells with .text-end. */
+.table tbody td:first-child,
+.table tbody td.text-end {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+}
+
+.table tbody td.text-end { color: var(--ink); font-weight: 500; }
+
+.table-responsive { border-radius: var(--bs-border-radius-lg); overflow: hidden; }
+
+/* ============================================================
+   Status pills — the thing you read from across the room.
+   Pending carries a slow pulse so unfinished work stands out.
+   ============================================================ */
+
+.badge {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.01em;
+    padding: 0.36em 0.7em;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    border: 1px solid transparent;
+}
+
+.badge::before {
+    content: '';
+    width: 0.4em;
+    height: 0.4em;
+    border-radius: 50%;
+    background: currentColor;
+    flex: none;
+}
+
+.badge.bg-warning {
+    background-color: var(--amber-wash) !important;
+    color: var(--amber) !important;
+    border-color: rgba(168, 112, 10, 0.25);
+}
+
+.badge.bg-warning::before { animation: pulse-dot 1.9s ease-in-out infinite; }
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1;   transform: scale(1); }
+    50%      { opacity: 0.35; transform: scale(0.72); }
+}
+
+.badge.bg-success {
+    background-color: var(--moss-wash) !important;
+    color: var(--moss) !important;
+    border-color: rgba(47, 107, 63, 0.25);
+}
+
+.badge.bg-info {
+    background-color: var(--teal-wash) !important;
+    color: var(--teal) !important;
+    border-color: rgba(26, 110, 106, 0.25);
+}
+
+.badge.bg-danger {
+    background-color: var(--chile-wash) !important;
+    color: var(--chile) !important;
+    border-color: rgba(168, 40, 30, 0.25);
+}
+
+.badge.bg-secondary, .badge.bg-dark {
+    background-color: #E7EBE7 !important;
+    color: var(--ink-soft) !important;
+    border-color: var(--hairline-firm);
+}
+
+/* ============================================================
+   Forms
+   ============================================================ */
+
+.form-label {
+    font-weight: 500;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+}
+
+.form-control, .form-select {
+    border-color: var(--hairline-firm);
+    border-radius: var(--bs-border-radius-sm);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.92rem;
+    background-color: var(--surface);
+    transition: border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.form-control::placeholder { color: #9DAAA3; }
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--brass);
+    box-shadow: 0 0 0 3px rgba(184, 134, 59, 0.18);
+}
+
+.form-check-input:checked {
+    background-color: var(--pine);
+    border-color: var(--pine);
+}
+
+.form-text { font-size: 0.82rem; color: var(--ink-soft); }
+
+/* ============================================================
+   Alerts — slide in, then retire (see script.js)
+   ============================================================ */
+
+.alert {
+    border-radius: var(--bs-border-radius);
+    border-width: 1px;
+    border-left-width: 3px;
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+    animation: alert-in 0.38s var(--ease) both;
+}
+
+@keyframes alert-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.alert-danger  { background: var(--chile-wash); color: #7E1E17; border-color: rgba(168,40,30,.2); border-left-color: var(--chile); }
+.alert-success { background: var(--moss-wash);  color: #245231; border-color: rgba(47,107,63,.2); border-left-color: var(--moss); }
+.alert-warning { background: var(--amber-wash); color: #7C5207; border-color: rgba(168,112,10,.2); border-left-color: var(--amber); }
+.alert-info    { background: var(--teal-wash);  color: #135350; border-color: rgba(26,110,106,.2); border-left-color: var(--teal); }
+
+/* ============================================================
+   Login — one card, three roles.
+   The role picker is built from three hidden radio inputs, so
+   it works without JavaScript and is keyboard operable.
+   ============================================================ */
+
+.login-body {
+    min-height: 100vh;
+    background: var(--pine-deep);
+    background-image:
+        radial-gradient(circle at 18% 22%, rgba(184, 134, 59, 0.22), transparent 42%),
+        radial-gradient(circle at 82% 78%, rgba(26, 110, 106, 0.26), transparent 45%);
+    background-size: 160% 160%;
+    animation: drift 26s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+    from { background-position: 0% 0%; }
+    to   { background-position: 100% 100%; }
+}
+
+.login-card {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 30px 70px -28px rgba(0, 0, 0, 0.7) !important;
+    animation: card-in 0.6s var(--ease) both;
+}
+
+@keyframes card-in {
+    from { opacity: 0; transform: translateY(14px) scale(0.985); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* A brass rule across the top edge of the card. */
+.login-card::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brass) 0%, #D9AE66 50%, var(--brass) 100%);
+}
+
+.login-mark {
+    font-size: 2.1rem;
+    line-height: 1;
+}
+
+.login-head h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.35rem;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin: 0;
+}
+
+/* ---- Role picker ---- */
+
+.role-radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.role-switch {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: var(--surface-sunk);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 4px;
+}
+
+/* The pill that slides under the selected role. */
+.role-switch::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: calc((100% - 8px) / 3);
+    background: var(--pine);
+    border-radius: 999px;
+    box-shadow: var(--shadow-low);
+    transition: transform 0.32s var(--ease);
+    z-index: 0;
+}
+
+#role-employee:checked ~ .role-switch::before { transform: translateX(100%); }
+#role-customer:checked ~ .role-switch::before { transform: translateX(200%); }
+
+.role-option {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 0.45rem 0.2rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    border-radius: 999px;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.28s var(--ease);
+}
+
+.role-option:hover { color: var(--ink); }
+
+#role-admin:checked    ~ .role-switch .role-option:nth-child(1),
+#role-employee:checked ~ .role-switch .role-option:nth-child(2),
+#role-customer:checked ~ .role-switch .role-option:nth-child(3) {
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+/* Keyboard focus lands on the hidden radio; show it on the control. */
+.role-radio:focus-visible ~ .role-switch {
+    outline: 2px solid var(--brass);
+    outline-offset: 3px;
+}
+
+/* Self-registration is for guests only. */
+.customer-only { display: none; }
+#role-customer:checked ~ .customer-only { display: block; }
+
+.login-icon { font-size: 2.2rem; }
+
+/* ============================================================
+   Page-load sequence: banner, then tiles, then panels.
+   One orchestrated moment per page — nothing repeats on scroll.
+   ============================================================ */
+
+.welcome-banner,
+.dashboard-card,
+main > .card,
+.container-fluid > h3,
+.container > h3,
+.container-fluid > .card,
+.container > .card,
+.table-responsive {
+    animation: rise 0.5s var(--ease) both;
+}
+
+@keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.row > [class*='col-']:nth-child(1)  .dashboard-card { animation-delay: 0.06s; }
+.row > [class*='col-']:nth-child(2)  .dashboard-card { animation-delay: 0.11s; }
+.row > [class*='col-']:nth-child(3)  .dashboard-card { animation-delay: 0.16s; }
+.row > [class*='col-']:nth-child(4)  .dashboard-card { animation-delay: 0.21s; }
+.row > [class*='col-']:nth-child(5)  .dashboard-card { animation-delay: 0.26s; }
+.row > [class*='col-']:nth-child(6)  .dashboard-card { animation-delay: 0.31s; }
+.row > [class*='col-']:nth-child(7)  .dashboard-card { animation-delay: 0.36s; }
+.row > [class*='col-']:nth-child(8)  .dashboard-card { animation-delay: 0.41s; }
+.row > [class*='col-']:nth-child(9)  .dashboard-card { animation-delay: 0.46s; }
+.row > [class*='col-']:nth-child(10) .dashboard-card { animation-delay: 0.51s; }
+
+/* ============================================================
+   Empty states & footer
+   ============================================================ */
+
+.coming-soon-wrapper { min-height: 68vh; }
 
 .coming-soon-icon {
-    font-size: 4rem;
+    font-size: 3.2rem;
+    color: var(--hairline-firm);
 }
 
 footer {
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid var(--hairline);
     padding-top: 1rem;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+}
+
+.login-body footer, .login-body .text-white { color: #8FA298 !important; }
+
+/* The copyright line sits outside the card, on the dark ground. */
+.login-body .container > .row > [class*='col-'] > p { color: #8FA298; }
+
+/* ============================================================
+   Small screens
+   ============================================================ */
+
+@media (max-width: 767.98px) {
+    body { font-size: 0.92rem; }
+    h2 { font-size: 1.45rem; }
+    .navbar { position: static; }
+    .navbar-dark .navbar-nav .nav-link { padding: 0.5rem 0.25rem; }
+    .navbar-dark .navbar-nav .nav-link::after { left: 0.25rem; right: 0.25rem; }
+    .welcome-banner { padding: 1.25rem !important; }
+    .dashboard-card:hover { transform: none; }
+}
+
+/* ============================================================
+   Respect the system preference. Nothing moves if they've
+   asked for that, but every state stays readable.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+    .dashboard-card::before { transform: scaleY(1); }
+    .navbar-dark .navbar-nav .nav-link.active::after { transform: scaleX(1); }
 }

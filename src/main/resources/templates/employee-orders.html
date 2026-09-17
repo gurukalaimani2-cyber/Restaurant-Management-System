@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Queue - Restaurant Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+        <a class="navbar-brand fw-bold" th:href="@{/employee/dashboard}">🍽️ Restaurant Management System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" th:href="@{/employee/dashboard}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/employee/orders}">Orders</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/employee/reservations}">Reservations</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/employee/attendance}">Attendance</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/employee/profile}">My Profile</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item"><span class="nav-link text-light" sec:authentication="name">Staff</span></li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-outline-light btn-sm ms-2">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4 px-4">
+        <h3 class="fw-bold mb-3">Active Orders</h3>
+
+        <div class="alert alert-info" th:if="${#lists.isEmpty(orders)}">
+            No pending or preparing orders right now.
+        </div>
+
+        <div class="card shadow-sm" th:unless="${#lists.isEmpty(orders)}">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Table</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th class="text-end">Amount</th>
+                            <th>Placed</th>
+                            <th>Status</th>
+                            <th class="text-end">Move forward</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.id}">1</td>
+                            <td th:text="${order.tableNumber}">5</td>
+                            <td th:text="${order.customerName}">Name</td>
+                            <td th:text="${order.itemsOrdered}">Items</td>
+                            <td class="text-end" th:text="${order.totalAmount}">0.00</td>
+                            <td th:text="${#temporals.format(order.orderTime, 'dd MMM, HH:mm')}">—</td>
+                            <td>
+                                <span class="badge"
+                                      th:classappend="${order.orderStatus == 'PENDING'} ? 'bg-warning text-dark' : 'bg-info text-dark'"
+                                      th:text="${order.orderStatus}">PENDING</span>
+                            </td>
+                            <td class="text-end">
+                                <form th:action="@{'/employee/orders/status/' + ${order.id}}" method="post"
+                                      class="d-inline" th:if="${order.orderStatus == 'PENDING'}">
+                                    <input type="hidden" name="status" value="PREPARING">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Start preparing</button>
+                                </form>
+                                <form th:action="@{'/employee/orders/status/' + ${order.id}}" method="post"
+                                      class="d-inline" th:if="${order.orderStatus == 'PREPARING'}">
+                                    <input type="hidden" name="status" value="COMPLETED">
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Mark completed</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center text-muted mt-5 mb-3">
+        <small>&copy; 2026 Restaurant Management System. All rights reserved.</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/script.js}"></script>
+</body>
+</html>
